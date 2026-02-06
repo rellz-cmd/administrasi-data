@@ -1,0 +1,196 @@
+# BAB 3: IMPLEMENTASI SISTEM (CORE CODE & LOGIC)
+
+Dokumen ini berisi potongan kode inti (Core Logic) yang digunakan dalam pembangunan sistem MarketHub, beserta penjelasan teknis untuk laporan dan panduan menjawab pertanyaan penguji.
+
+---
+
+## 1. Klarifikasi Teknis: Hosting & HTML
+
+**PENTING:** Web ini dibangun menggunakan **PHP (Hypertext Preprocessor)** dan database **MySQL**.
+
+*   **Tidak bisa dibuka hanya dengan HTML:** File `.php` membutuhkan server (seperti Apache di XAMPP atau Hosting) untuk menerjemahkan logika kode menjadi halaman web. Jika diubah menjadi `.html`, fitur login, database, dan transaksi tidak akan berfungsi.
+*   **Cara Hosting:** Upload semua file ke folder `public_html` di penyedia hosting yang mendukung PHP & MySQL (contoh: Niagahoster, IdCloudHost, 000webhost), lalu import database `includes/db.sql` ke phpMyAdmin di hosting tersebut.
+
+---
+
+## 2. Implementasi Kode Inti
+
+### A. Fitur Pembayaran & Pengurangan Stok Otomatis
+**File:** `payment.php`
+
+Fitur ini menangani konfirmasi pembayaran. Saat bukti bayar diupload, status transaksi berubah menjadi 'paid' dan stok produk otomatis berkurang di database.
+
+**Kode Inti:**
+```php
+// 1. Update status pembayaran menjadi 'paid'
+$update_query = "UPDATE transactions SET payment_status = 'paid', status = 'paid', payment_proof = ?, confirmed_at = NOW() WHERE id = ?";
+$stmt = $conn->prepare($update_query);
+$stmt->bind_param("si", $payment_proof, $transaction_id);
+$stmt->execute();
+
+// 2. Kurangi Stok Produk (Logika Bisnis)
+// Menggunakan query atomic: stock = stock - qty
+$stock_query = "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?";
+$stock_stmt = $conn->prepare($stock_query);
+$stock_stmt->bind_param("iii", $qty, $product_id, $qty);
+$stock_stmt->execute();
+```
+
+**🎓 Jawaban Sidang:**
+*   **Q:** "Bagaimana sistem memastikan stok tidak minus saat dibeli?"
+*   **A:** "Saya menggunakan logika SQL `AND stock >= ?` pada query update. Jadi, pengurangan stok hanya terjadi jika jumlah stok saat ini mencukupi jumlah pembelian."
+
+---
+
+### B. Dashboard & Visualisasi Credit Score
+**File:** `dashboard.php`
+
+Fitur ini menampilkan skor kredit penjual dengan warna yang dinamis (Hijau/Kuning/Merah) berdasarkan nilai skornya.
+
+**Kode Inti:**
+```php
+<!-- Logika Pewarnaan Dinamis -->
+<div class="score-number" style="color: <?php 
+    $cs = isset($user['credit_score']) ? $user['credit_score'] : 100;
+    // Logika If-Else untuk menentukan warna
+    if ($cs >= 80) echo '#27ae60';      // Hijau (Aman)
+    elseif ($cs >= 60) echo '#f39c12';  // Kuning (Waspada)
+    else echo '#e74c3c';                // Merah (Bahaya)
+?>;">
+    <?php echo $cs; ?>/100
+</div>
+```
+
+**🎓 Jawaban Sidang:**
+*   **Q:** "Bagaimana cara kamu mengatur warna Credit Score?"
+*   **A:** "Saya menggunakan logika PHP *Server-Side Rendering*. Nilai skor dicek menggunakan kondisi `if-else`. Jika nilai >= 80, kode warna Hex Hijau dicetak ke dalam atribut `style` CSS."
+*   **Q:** "Coba ganti warnanya jadi Biru sekarang."
+*   **A:** (Buka `dashboard.php`) "Baik, saya tinggal ganti kode hex `#27ae60` menjadi `blue` di baris ini."
+
+---
+
+### C. Keamanan: Auto-Ban Fraud System
+**File:** `report_fraud.php`
+
+Sistem keamanan otomatis yang memblokir (ban) penjual jika terdeteksi melakukan kecurangan berulang kali.
+
+**Kode Inti:**
+```php
+// 1. Tambah counter fraud (+1)
+$update_fraud = $conn->prepare("UPDATE users SET fraud_count = fraud_count + 1 WHERE id = ?");
+$update_fraud->execute();
+
+// 2. Cek apakah harus di-BAN (Logika Otomatis)
+// Jika fraud >= 3 kali ATAU skor kredit <= 40
+if ($status_result['fraud_count'] >= 3 || $status_result['credit_score'] <= 40) {
+    // Eksekusi Ban User
+    $ban_seller = $conn->prepare("UPDATE users SET is_banned = 1 WHERE id = ?");
+    $ban_seller->execute();
+}
+```
+
+**🔍 Penjelasan Rinci (Analisis Kode):**
+1.  **Incremental Update**: Query `fraud_count = fraud_count + 1` memastikan penghitungan pelanggaran selalu akurat berdasarkan data terakhir di database, menghindari kesalahan jika ada admin lain yang mengupdate data bersamaan.
+2.  **Logika Bisnis Otomatis**: Blok `if` mengevaluasi dua kondisi fatal (Critical Conditions): apakah penipuan sudah mencapai batas toleransi (3 kali) ATAU skor kredit sudah sangat rendah (<= 40).
+3.  **Flagging (`is_banned = 1`)**: Jika kondisi terpenuhi, sistem mengubah status user menjadi 'banned' (1) secara instan. Di halaman login, sistem akan mengecek flag ini untuk menolak akses masuk user tersebut secara permanen.
+
+**🎓 Jawaban Sidang:**
+*   **Q:** "Kenapa user otomatis di-banned? Siapa yang melakukan ban?"
+*   **A:** "Sistem yang melakukannya secara otomatis, Pak/Bu. Setiap kali ada laporan masuk, sistem mengecek `fraud_count`. Jika nilainya mencapai 3, query update `is_banned = 1` dijalankan. Ini mengurangi beban kerja admin."
+*   **Q:** "Saya mau user di-ban setelah 5 kali laporan, bukan 3."
+*   **A:** (Buka `report_fraud.php`) "Saya tinggal ubah angka `3` pada kondisi `if ($status_result['fraud_count'] >= 3)` menjadi `5`."
+
+---
+
+### D. Manajemen Produk: Edit & Upload Gambar
+**File:** `edit_product.php`
+
+Logika untuk mengganti gambar produk, termasuk menghapus file gambar lama agar server tidak penuh sampah file.
+
+**Kode Inti:**
+```php
+if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+    // Validasi tipe file (Hanya Gambar)
+    if (!in_array($file['type'], $allowed_types)) {
+        $error = "Format gambar harus JPG, PNG, atau GIF!";
+    } else {
+        // Hapus gambar lama dari folder (PENTING untuk hemat storage)
+        if (file_exists($product['image_url'])) {
+            unlink($product['image_url']);
+        }
+        // Upload gambar baru
+        move_uploaded_file($file['tmp_name'], $image_url);
+    }
+}
+```
+
+**🎓 Jawaban Sidang:**
+*   **Q:** "Kalau ganti gambar, gambar lama kemana?"
+*   **A:** "Gambar lama dihapus secara fisik dari server menggunakan fungsi PHP `unlink()`. Ini mencegah penumpukan file sampah (garbage files) di hosting."
+
+---
+
+### E. Manajemen Produk: Hapus Permanen
+**File:** `delete_product.php`
+
+**Kode Inti:**
+```php
+// 1. Hapus file fisik gambar dulu
+if (file_exists($product['image_url'])) {
+    unlink($product['image_url']);
+}
+
+// 2. Baru hapus data di database
+$delete_query = "DELETE FROM products WHERE id = ?";
+$stmt = $conn->prepare($delete_query);
+$stmt->execute();
+```
+
+**🔍 Penjelasan Rinci (Analisis Kode):**
+1.  **Urutan Eksekusi (File First)**: Sangat krusial untuk menghapus file fisik (`unlink`) **sebelum** menghapus data di database. Jika data database dihapus duluan, sistem akan kehilangan referensi nama file gambarnya, sehingga gambar tersebut akan tertinggal selamanya di server tanpa pemilik.
+2.  **Database Cleanup**: `DELETE FROM products` menghapus baris data produk dari tabel MySQL agar produk tersebut tidak lagi muncul di hasil pencarian atau dashboard.
+
+**🎓 Jawaban Sidang:**
+*   **Q:** "Kenapa kodenya ada dua tahap?"
+*   **A:** "Pertama kita harus membersihkan file gambarnya dari folder `uploads/`. Setelah filenya bersih, baru kita hapus record datanya dari database MySQL agar data tetap konsisten."
+
+---
+
+### F. Fitur Pencarian (Search Engine)
+**File:** `shop.php`
+
+Logika pencarian produk berdasarkan kata kunci pada Judul atau Deskripsi.
+
+**Kode Inti:**
+```php
+$where = "WHERE p.status = 'active'";
+
+if ($search_query) {
+    // Menggunakan operator LIKE dan Wildcard %
+    // Mencari kecocokan di Judul ATAU Deskripsi
+    $where .= " AND (p.title LIKE ? OR p.description LIKE ?)";
+    $search = "%$search_query%"; // %baju% akan menemukan "baju baru", "baju lama"
+}
+```
+
+**🎓 Jawaban Sidang:**
+*   **Q:** "Gimana cara kerja fitur search kamu?"
+*   **A:** "Saya menggunakan perintah SQL `LIKE` dengan tanda persen (`%`). Ini memungkinkan pencarian *partial match*. Jadi kalau user cari kata 'Baju', sistem akan menemukan 'Baju Merah', 'Kaos Baju', dll."
+
+---
+
+## 3. Tips Tambahan: Mengganti Tampilan (CSS)
+
+Jika penguji meminta mengganti warna background website secara global.
+
+**File:** `assets/css/style.css`
+
+```css
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa; /* <--- Ganti kode warna ini */
+    color: var(--dark-color);
+    line-height: 1.6;
+}
+```
+**Jawab:** "Saya mengubah properti `background-color` pada selector `body` di file CSS utama."

@@ -1,0 +1,24 @@
+APLIKASI KANTINYUK - SIAP DIJALANKAN! ✓
+════════════════════════════════════════════════
+
+COMMAND UNTUK JALANKAN:
+    .\.venv\Scripts\python.exe app.py
+
+BROWSER:
+    localhost:5000
+
+LOGIN TEST:
+    Username: admin
+    Password: admin123
+
+HANYA PERLU INI 3 LANGKAH:
+1. Buka terminal (Ctrl + `)
+2. Paste command di atas
+3. Buka browser: localhost:5000
+
+SELESAI! 🎉
+
+File penting ada di folder c:\xampp\htdocs\uwehh
+Dokumentasi lengkap ada di file-file .txt
+
+Untuk bantuan, baca: 00_BACA_PERTAMA_INI.txt

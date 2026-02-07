@@ -1,0 +1,94 @@
+CARA MENJALANKAN APLIKASI KANTINYUK
+====================================
+
+STEP 1: Buka Terminal PowerShell
+================================
+- Tekan Ctrl + Backtick (`) di VS Code
+- Atau Ctrl + Shift + Terminal
+
+STEP 2: Jalankan Aplikasi
+=========================
+Salin dan paste command berikut di terminal:
+
+    .\.venv\Scripts\python.exe app.py
+
+Atau gunakan command ini (lebih pendek):
+
+    python app.py
+
+Output yang benar:
+    * Serving Flask app 'app'
+    * Debug mode: on
+    * Running on http://127.0.0.1:5000
+
+STEP 3: Buka Browser
+====================
+1. Buka browser (Chrome, Firefox, Edge, dll)
+2. Ketik di address bar: localhost:5000
+   atau: http://127.0.0.1:5000
+
+STEP 4: Register Akun Baru
+===========================
+1. Klik "Daftar di sini"
+2. Isi Username: admin
+   Isi Password: admin123
+3. Klik "Daftar"
+4. Login dengan username & password yang baru
+
+STEP 5: Mulai Belanja
+======================
+1. Setelah login, lihat menu kategori
+2. Pilih "Makanan" atau "Minuman"
+3. Tambahkan item ke keranjang
+4. Lihat keranjang
+5. Checkout dengan isi data diri
+6. Pilih metode pembayaran (QRIS atau Cash)
+7. Selesai!
+
+CARA MENGHENTIKAN APLIKASI
+============================
+Tekan Ctrl + C di terminal
+
+FILE-FILE YANG PENTING
+======================
+- app.py              (File utama - jalankan ini)
+- database.py        (Database SQLite & Login)
+- menu_data.py       (Data Menu)
+- templates.py       (Desain HTML/CSS)
+- kantin.db          (Database - otomatis dibuat)
+
+TROUBLESHOOTING
+===============
+
+Error: "python: command not found"
+Solusi: Gunakan command ini:
+    .\.venv\Scripts\python.exe app.py
+
+Error: "Port 5000 sudah digunakan"
+Solusi: Buka file app.py, cari baris terakhir,
+ubah port 5000 menjadi 5001 atau port lain
+
+Error: "flask not found"
+Solusi: Sudah terinstall di virtual environment
+Gunakan: .\.venv\Scripts\python.exe app.py
+
+FITUR APLIKASI
+==============
+✓ Register & Login (Wajib daftar dahulu)
+✓ 3 Kategori Menu (Makanan Berat, Ringan, Minuman)
+✓ Keranjang Belanja Persistent
+✓ Checkout dengan Data Pemesan
+✓ 2 Metode Pembayaran (QRIS & Cash)
+✓ Design Modern Biru Dongker
+✓ Database SQLite
+
+HANYA PYTHON - TIDAK ADA JAVASCRIPT!
+====================================
+Aplikasi ini 100% pure Python dengan Flask.
+Tidak menggunakan HTML/CSS/JS tambahan.
+Semua dicampur dalam Python!
+
+APLIKASI SIAP DIGUNAKAN!
+========================
+Silakan jalankan command: .\.venv\Scripts\python.exe app.py
+Kemudian buka: http://localhost:5000

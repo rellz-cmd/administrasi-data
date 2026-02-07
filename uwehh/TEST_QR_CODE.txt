@@ -1,0 +1,247 @@
+════════════════════════════════════════════════════════════════════════════
+                    TESTING CHECKLIST - FITUR QR CODE
+════════════════════════════════════════════════════════════════════════════
+
+Ikuti checklist di bawah untuk test fitur QR Code:
+
+
+STEP 1: SETUP & RUN
+════════════════════════════════════════════════════════════════════════════
+
+☐ Buka terminal (Ctrl + `)
+☐ Jalankan: .\.venv\Scripts\python.exe app.py
+☐ Tunggu sampai: "Running on http://127.0.0.1:5000"
+☐ Buka browser: localhost:5000
+
+
+STEP 2: REGISTER USER BARU (ATAU LOGIN)
+════════════════════════════════════════════════════════════════════════════
+
+OPSI A - Register:
+  ☐ Klik "Daftar di sini"
+  ☐ Username: testuser1
+  ☐ Password: test123456
+  ☐ Klik "Daftar"
+  ☐ Login dengan akun yang baru dibuat
+
+OPSI B - Login Test Account:
+  ☐ Username: admin
+  ☐ Password: admin123
+  ☐ Klik "Login"
+
+
+STEP 3: PESAN MENU
+════════════════════════════════════════════════════════════════════════════
+
+☐ Klik "Makanan"
+☐ Klik "Makanan Berat"
+☐ Pilih item (misal: Mie Ayam)
+☐ Isi quantity: 2
+☐ Klik "Tambah"
+☐ Klik "Kembali ke Beranda"
+☐ Klik "Minuman"
+☐ Pilih item (misal: Es Teh)
+☐ Isi quantity: 1
+☐ Klik "Tambah"
+
+
+STEP 4: LIHAT KERANJANG
+════════════════════════════════════════════════════════════════════════════
+
+☐ Klik "🛒 Keranjang" di navbar
+☐ Verifikasi item ada di keranjang:
+  ☐ Mie Ayam x 2
+  ☐ Es Teh x 1
+☐ Verifikasi total harga terlihat
+☐ Klik "Checkout →"
+
+
+STEP 5: CHECKOUT
+════════════════════════════════════════════════════════════════════════════
+
+☐ Form "Ringkasan Pesanan" tampil
+☐ Verifikasi item & total di ringkasan
+
+Form "Data Diri Pemesan":
+  ☐ Nama Lengkap: Budi Santoso
+  ☐ Nomor Telepon: 081234567890
+
+Metode Pembayaran:
+  ☐ Dropdown terlihat dengan 2 pilihan:
+    ☐ QRIS (E-Wallet)
+    ☐ Cash (Bayar Langsung)
+
+☐ PERTAMA: Pilih "Cash"
+☐ Klik "Lanjut Pembayaran"
+
+
+STEP 6: TEST METODE CASH (Tidak ada QR Code)
+════════════════════════════════════════════════════════════════════════════
+
+Halaman Pembayaran Berhasil tampil:
+  ☐ Icon ✅ terlihat
+  ☐ "Pembayaran Berhasil!" terlihat
+  ☐ Nama pemesan: Budi Santoso (terlihat)
+  ☐ Nomor telepon: 081234567890 (terlihat)
+
+Metode Pembayaran:
+  ☐ Tampil: "💵 Cash (Bayar Langsung) - Pembayaran tunai saat pengambilan pesanan"
+  ☐ PENTING: Tidak ada QR code! ✓ (Ini benar, bukan bug)
+
+☐ Klik "← Kembali ke Beranda"
+
+
+STEP 7: CHECKOUT LAGI - TEST METODE QRIS (Ada QR Code)
+════════════════════════════════════════════════════════════════════════════
+
+☐ Klik "Makanan"
+☐ Klik "Makanan Ringan"
+☐ Pilih Kebab
+☐ Quantity: 1
+☐ Klik "Tambah"
+☐ Klik "🛒 Keranjang"
+☐ Verifikasi Kebab ada
+☐ Klik "Checkout →"
+
+
+STEP 8: CHECKOUT FORM - QRIS
+════════════════════════════════════════════════════════════════════════════
+
+☐ Nama Lengkap: Ahmad Pratama
+☐ Nomor Telepon: 089876543210
+☐ Pilih Metode: "QRIS (E-Wallet)" ← PENTING!
+☐ Klik "Lanjut Pembayaran"
+
+
+STEP 9: VERIFY QR CODE PAGE
+════════════════════════════════════════════════════════════════════════════
+
+Halaman Pembayaran Berhasil tampil:
+  ☐ Icon ✅ terlihat
+  ☐ "Pembayaran Berhasil!" terlihat
+  ☐ Nama pemesan: Ahmad Pratama (terlihat)
+  ☐ Nomor telepon: 089876543210 (terlihat)
+
+PENTING - QR CODE BOX:
+  ☐ Ada box dengan border biru
+  ☐ Judul: "Kode QRIS Anda"
+  ☐ ADA GAMBAR QR CODE! ✓ (Ini adalah update baru)
+  ☐ QR Code berbentuk persegi
+  ☐ QR Code berwarna hitam putih (standard)
+
+Instruksi Pembayaran:
+  ☐ Ada text: "Cara Pembayaran:"
+  ☐ Ada instruksi 4 step:
+    ☐ "1. Buka aplikasi e-wallet Anda..."
+    ☐ "2. Pilih menu 'Scan QRIS'..."
+    ☐ "3. Arahkan kamera ke kode QRIS..."
+    ☐ "4. Konfirmasi dan selesaikan pembayaran"
+
+PENTING - TIDAK ADA QR CODE UNTUK CASH:
+  ☐ Tidak ada text: "Metode Pembayaran: 💳 QRIS (E-Wallet) - Silakan tunjukkan QRIS..."
+  ☐ Hanya ada instruksi pembayaran QRIS yang sesuai
+
+
+STEP 10: TEST QR CODE FUNCTIONALITY
+════════════════════════════════════════════════════════════════════════════
+
+Browser Console Check:
+  ☐ Tekan F12 untuk buka Developer Tools
+  ☐ Pergi ke tab "Console"
+  ☐ Tidak ada error merah
+  ☐ Network tab: tidak ada failed request
+
+Visual Verification:
+  ☐ QR Code image load successfully
+  ☐ QR Code tidak blur
+  ☐ QR Code bisa di-zoom dengan Ctrl+Scroll
+  ☐ QR Code bisa di-inspect dengan right-click
+
+
+════════════════════════════════════════════════════════════════════════════
+STEP 11: EDGE CASE TESTING
+════════════════════════════════════════════════════════════════════════════
+
+TEST 1: Refresh Halaman Pembayaran QRIS
+  ☐ Di halaman pembayaran QRIS, refresh browser (F5)
+  ☐ Page tetap sama
+  ☐ QR Code tetap visible
+
+TEST 2: Back Button
+  ☐ Klik "← Kembali ke Beranda"
+  ☐ Keranjang kosong (sudah diprocess)
+  ☐ Bisa pesan lagi
+
+TEST 3: Multiple QR Codes
+  ☐ Checkout dengan data berbeda
+  ☐ QR Code berbeda setiap kali
+  ☐ Confirma: setiap checkout generate QR baru
+
+TEST 4: Browser Compatibility
+  ☐ Test di Chrome ✓
+  ☐ Test di Firefox ✓
+  ☐ Test di Edge ✓
+  ☐ Test di Mobile Browser ✓
+
+
+════════════════════════════════════════════════════════════════════════════
+STEP 12: VERIFICATION
+════════════════════════════════════════════════════════════════════════════
+
+FITUR QRIS:
+  ☐ QR Code generate otomatis saat metode QRIS dipilih
+  ☐ QR Code tampil di halaman pembayaran
+  ☐ QR Code dapat di-scan (image valid)
+  ☐ QR Code berisi data: nama + telepon customer
+  ☐ Ada instruksi pembayaran QRIS yang jelas
+
+FITUR CASH:
+  ☐ Tidak generate QR Code
+  ☐ Tidak ada QR Code di halaman pembayaran
+  ☐ Tetap tampil instruksi cash biasa
+  ☐ Tidak mempengaruhi alur normal
+
+KODE:
+  ☐ app.py import library qrcode - OK
+  ☐ generate_qr_code() function - Working
+  ☐ Route /bayar generate QR untuk QRIS - OK
+  ☐ templates.py conditional render - OK
+  ☐ Tidak ada error di console - OK
+  ☐ Tidak break code lama - OK
+
+
+════════════════════════════════════════════════════════════════════════════
+FINAL VERIFICATION
+════════════════════════════════════════════════════════════════════════════
+
+✓ QR Code muncul HANYA untuk QRIS
+✓ QR Code tidak muncul untuk Cash
+✓ QR Code image valid & scannable
+✓ Instruksi pembayaran ada & jelas
+✓ Design responsive di semua device
+✓ Tidak ada error di browser console
+✓ Tidak mempengaruhi fitur lain
+✓ Kode bersih & terstruktur
+
+
+════════════════════════════════════════════════════════════════════════════
+SUMMARY
+════════════════════════════════════════════════════════════════════════════
+
+JIKA SEMUA CHECKLIST ✓ = FITUR QR CODE BERHASIL! 🎉
+
+JIKA ADA YANG ✗ = LIHAT TROUBLESHOOTING DI UPDATE_QR_CODE.txt
+
+
+════════════════════════════════════════════════════════════════════════════
+
+Testing date: _________________
+Tested by: _________________
+Status: ☐ PASSED   ☐ FAILED
+
+Notes: ____________________________________________________
+      ____________________________________________________
+      ____________________________________________________
+
+
+════════════════════════════════════════════════════════════════════════════

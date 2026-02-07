@@ -1,0 +1,145 @@
+═══════════════════════════════════════════════════════════════
+        PANDUAN LENGKAP MENJALANKAN APLIKASI KANTINYUK
+═══════════════════════════════════════════════════════════════
+
+📋 PERSYARATAN SISTEM:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Python 3.7+ (sudah terinstall)
+✓ Flask (sudah terinstall)
+✓ SQLite3 (bawaan Python)
+
+═══════════════════════════════════════════════════════════════
+🚀 LANGKAH-LANGKAH MENJALANKAN APLIKASI:
+═══════════════════════════════════════════════════════════════
+
+LANGKAH 1: Buka Terminal PowerShell
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Tekan Ctrl + backtick (`) di VS Code
+- Atau buka PowerShell secara manual
+- Pastikan Anda di folder: c:\xampp\htdocs\uwehh
+
+LANGKAH 2: Navigasi ke Folder Aplikasi
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ketik command:
+    Set-Location C:\xampp\htdocs\uwehh
+
+LANGKAH 3: Jalankan Aplikasi
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ketik command:
+    python app.py
+
+Atau jika menggunakan virtual environment:
+    .\.venv\Scripts\python.exe app.py
+
+Output yang benar akan terlihat seperti:
+    * Running on http://127.0.0.1:5000
+    WARNING: This is a development server. Do not use it in production.
+    Press CTRL+C to quit
+
+LANGKAH 4: Buka Browser
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Buka browser favorit Anda (Chrome, Firefox, Edge, dll)
+- Akses: http://localhost:5000
+- Atau: http://127.0.0.1:5000
+
+LANGKAH 5: Lakukan Registrasi
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Klik "Daftar di sini" di halaman login
+2. Isi username (misal: budi)
+3. Isi password (misal: 123456)
+4. Klik "Daftar"
+5. Kembali ke login dan masukkan username & password yang baru
+
+═══════════════════════════════════════════════════════════════
+📂 STRUKTUR FILE APLIKASI:
+═══════════════════════════════════════════════════════════════
+
+c:\xampp\htdocs\uwehh\
+├── app.py                 ← FILE UTAMA (jalankan ini!)
+├── database.py            ← Database & Login/Register
+├── menu_data.py           ← Data Menu Makanan
+├── templates.py           ← Desain HTML/CSS
+├── requirements.txt       ← Daftar Package
+├── kantin.db              ← Database (auto dibuat saat pertama kali)
+├── .venv\                 ← Virtual Environment
+└── README.md              ← Dokumentasi
+
+═══════════════════════════════════════════════════════════════
+✨ FITUR APLIKASI:
+═══════════════════════════════════════════════════════════════
+
+1. REGISTER & LOGIN
+   - Setiap user harus register dulu sebelum bisa belanja
+   - Password disimpan terenkripsi (SHA256)
+
+2. MENU MAKANAN
+   - Makanan Berat: Mie Ayam, Bakso, Nasi Pecel, dll
+   - Makanan Ringan: Dimsum, Kebab, Tahu, dll
+   - Minuman: Es Teh, Kopi, Thaitea, dll
+
+3. KERANJANG BELANJA
+   - Tambah/hapus item dari keranjang
+   - Data tersimpan di database SQLite
+   - Harga otomatis terhitung
+
+4. CHECKOUT
+   - Isi data diri (nama, nomor telepon)
+   - Pilih metode pembayaran:
+     ✓ QRIS (E-Wallet)
+     ✓ Cash (Bayar Langsung)
+
+5. PEMBAYARAN
+   - Konfirmasi pembayaran berhasil
+   - Tampil instruksi pembayaran sesuai metode
+
+═══════════════════════════════════════════════════════════════
+🐛 TROUBLESHOOTING:
+═══════════════════════════════════════════════════════════════
+
+ERROR: "ModuleNotFoundError: No module named 'flask'"
+SOLUSI: Jalankan command:
+    pip install flask
+
+ERROR: "Port 5000 sudah digunakan"
+SOLUSI: Edit app.py baris terakhir:
+    app.run(debug=True, port=5001)  ← Ganti 5000 dengan port lain
+
+ERROR: "database is locked"
+SOLUSI: Hapus file kantin.db dan jalankan ulang app.py
+
+═══════════════════════════════════════════════════════════════
+💡 TIPS & TRIK:
+═══════════════════════════════════════════════════════════════
+
+✓ Gunakan Ctrl+C di terminal untuk menghentikan aplikasi
+✓ Setiap edit file, cukup refresh browser (F5)
+✓ Data user & keranjang tersimpan di kantin.db
+✓ Untuk reset aplikasi: hapus file kantin.db
+
+═══════════════════════════════════════════════════════════════
+🎯 TESTING:
+═══════════════════════════════════════════════════════════════
+
+Untuk test aplikasi, coba:
+
+1. Register:
+   Username: admin
+   Password: admin123
+
+2. Login:
+   Username: admin
+   Password: admin123
+
+3. Pesan Menu:
+   - Pilih Makanan → Makanan Berat → Pilih menu
+   - Atau langsung Minuman
+
+4. Checkout:
+   - Lihat Keranjang → Checkout
+   - Isi nama & telepon
+   - Pilih metode pembayaran (QRIS atau Cash)
+   - Klik "Lanjut Pembayaran"
+
+═══════════════════════════════════════════════════════════════
+✅ APLIKASI SIAP DIGUNAKAN!
+═══════════════════════════════════════════════════════════════

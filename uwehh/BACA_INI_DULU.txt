@@ -1,0 +1,91 @@
+════════════════════════════════════════════════════════════════
+          PANDUAN CEPAT - JALANKAN APLIKASI (5 MENIT)
+════════════════════════════════════════════════════════════════
+
+1. BUKA TERMINAL
+════════════════════════════════════════════════════════════════
+Tekan Ctrl + ` (backtick) di VS Code
+Atau tekan Ctrl + Shift + Terminal
+
+
+2. PASTE COMMAND INI DI TERMINAL
+════════════════════════════════════════════════════════════════
+.\.venv\Scripts\python.exe app.py
+
+ATAU (jika yang atas tidak bekerja):
+python app.py
+
+
+3. TUNGGU SAMPAI MUNCUL PESAN INI
+════════════════════════════════════════════════════════════════
+* Running on http://127.0.0.1:5000
+
+Artinya aplikasi sudah jalan! 
+
+
+4. BUKA BROWSER
+════════════════════════════════════════════════════════════════
+Buka Chrome/Firefox/Edge
+Ketik di address bar: localhost:5000
+
+VOILA! Aplikasi sudah muncul! 
+
+
+5. DAFTAR AKUN BARU ATAU LOGIN TEST
+════════════════════════════════════════════════════════════════
+Opsi A: Daftar akun baru
+   Klik "Daftar di sini"
+   Username: john123
+   Password: pass123
+   Klik "Daftar"
+   Login dengan akun yang baru dibuat
+
+Opsi B: Gunakan akun test yang sudah ada
+   Username: admin
+   Password: admin123
+   Klik "Login"
+
+
+6. SELESAI! MULAI BELANJA
+════════════════════════════════════════════════════════════════
+Pilih menu → Tambah ke keranjang → Checkout → Pilih pembayaran
+
+
+7. UNTUK MENGHENTIKAN APLIKASI
+════════════════════════════════════════════════════════════════
+Tekan Ctrl + C di terminal
+
+
+JIKA ADA ERROR:
+════════════════════════════════════════════════════════════════
+
+Error: "python: command not found"
+→ Gunakan: .\.venv\Scripts\python.exe app.py
+
+Error: "ModuleNotFoundError: No module named 'flask'"
+→ Gunakan: .\.venv\Scripts\python.exe app.py
+
+Error: "Port 5000 already in use"
+→ Buka app.py, baris terakhir ubah 5000 → 5001
+
+Error: "database is locked"
+→ Hapus file kantin.db, jalankan ulang
+
+
+FILE PENTING:
+════════════════════════════════════════════════════════════════
+app.py              ← FILE UTAMA (jalankan ini!)
+database.py         ← Database & Login
+menu_data.py        ← Daftar menu
+templates.py        ← Desain tampilannya
+kantin.db           ← Database (otomatis dibuat)
+
+
+UDAH SIAP? JALANKAN SEKARANG:
+════════════════════════════════════════════════════════════════
+.\.venv\Scripts\python.exe app.py
+
+Lalu buka: http://localhost:5000
+
+ENJOY! 🍜
+════════════════════════════════════════════════════════════════
